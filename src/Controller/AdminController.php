@@ -46,22 +46,58 @@ class AdminController extends AbstractController
     public function Admin(Request $request)
     {
 
+        // $newAdmin = new UserPlateform();
+        // $newAdmin
+        //     ->setNom('Admin');
+        // $newAdmin
+        //     ->setPrenom('Admin');
+        // $newAdmin
+        //     ->setPhone('690863838');
+        // $passwordN = $this->passwordEncoder->hashPassword(
+        //     $newAdmin,
+        //     '0000'
+        // );
+        // $newAdmin
+        //     ->setPassword($passwordN);
+
+
+        // $this->em->persist($newAdmin);
+        // $this->em->flush();
+
         $newAdmin = new UserPlateform();
         $newAdmin
-            ->setNom('Admin');
+            ->setNom('EBALE');
         $newAdmin
-            ->setPrenom('Admin');
+            ->setPrenom('GREGORE');
         $newAdmin
-            ->setPhone('690863838');
+            ->setPhone('657530815');
         $passwordN = $this->passwordEncoder->hashPassword(
             $newAdmin,
-            '0000'
+            'Hérardgregore'
         );
         $newAdmin
             ->setPassword($passwordN);
 
 
         $this->em->persist($newAdmin);
+        $newAdmin1 = new UserPlateform();
+
+        $newAdmin1
+            ->setNom('EBALE EBALE');
+        $newAdmin1
+            ->setPrenom('ARNOLD');
+        $newAdmin1
+            ->setPhone('696979083');
+        $passwordN1 = $this->passwordEncoder->hashPassword(
+            $newAdmin1,
+            'LeGrand89'
+        );
+        $newAdmin1
+            ->setPassword($passwordN1);
+
+
+        $this->em->persist($newAdmin);
+        $this->em->persist($newAdmin1);
         $this->em->flush();
 
         return new JsonResponse([
