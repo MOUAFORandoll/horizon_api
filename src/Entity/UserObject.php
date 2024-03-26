@@ -18,14 +18,14 @@ class UserObject
     private ?string $src = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date_created = null;
+    private ?\DateTimeInterface $dateCreated = null;
 
     #[ORM\ManyToOne(inversedBy: 'userObjects')]
     private ?UserPlateform $user_plateform = null;
 
     public function __construct()
     {
-        $this->date_created = new \DateTime();
+        $this->dateCreated = new \DateTime();
     }
     public function getId(): ?int
     {
@@ -46,12 +46,12 @@ class UserObject
 
     public function getDateCreated(): ?\DateTimeInterface
     {
-        return $this->date_created;
+        return $this->dateCreated;
     }
 
-    public function setDateCreated(\DateTimeInterface $date_created): static
+    public function setDateCreated(\DateTimeInterface $dateCreated): static
     {
-        $this->date_created = $date_created;
+        $this->dateCreated = $dateCreated;
 
         return $this;
     }

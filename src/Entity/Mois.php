@@ -25,9 +25,16 @@ class Mois
     #[ORM\OneToMany(mappedBy: 'mois', targetEntity: Paiement::class)]
     private Collection $paiements;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $numSigle = null;
+
+    #[ORM\OneToMany(mappedBy: 'mois', targetEntity: Absences::class)]
+    private Collection $absences;
+
     public function __construct()
     {
         $this->paiements = new ArrayCollection();
+        $this->absences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -71,6 +78,48 @@ class Mois
             // set the owning side to null (unless already changed)
             if ($paiement->getMois() === $this) {
                 $paiement->setMois(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getNumSigle(): ?int
+    {
+        return $this->numSigle;
+    }
+
+    public function setNumSigle(?int $numSigle): static
+    {
+        $this->numSigle = $numSigle;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Absences>
+     */
+    public function getAbsences(): Collection
+    {
+        return $this->absences;
+    }
+
+    public function addAbsence(Absences $absence): static
+    {
+        if (!$this->absences->contains($absence)) {
+            $this->absences->add($absence);
+            $absence->setMois($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAbsence(Absences $absence): static
+    {
+        if ($this->absences->removeElement($absence)) {
+            // set the owning side to null (unless already changed)
+            if ($absence->getMois() === $this) {
+                $absence->setMois(null);
             }
         }
 

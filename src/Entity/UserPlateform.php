@@ -98,7 +98,7 @@ class UserPlateform implements UserInterface, PasswordAuthenticatedUserInterface
 
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private $date_created;
+    private $dateCreated;
 
 
     #[ORM\Column(type: "string", length: 10000000000, nullable: true)]
@@ -118,7 +118,7 @@ class UserPlateform implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
 
-        $this->date_created = new \DateTime();
+        $this->dateCreated = new \DateTime();
 
         $this->status = false;
         $this->employes = new ArrayCollection();
@@ -299,12 +299,12 @@ class UserPlateform implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getDateCreated(): ?\DateTimeInterface
     {
-        return $this->date_created;
+        return $this->dateCreated;
     }
 
-    public function setDateCreated(\DateTimeInterface $date_created): self
+    public function setDateCreated(\DateTimeInterface $dateCreated): self
     {
-        $this->date_created = $date_created;
+        $this->dateCreated = $dateCreated;
 
         return $this;
     }

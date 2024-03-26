@@ -55,7 +55,7 @@ class Employe
     private ?int $salaire = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["read:employe", "create:employe", "read:paiement"])]
+    #[Groups(["read:employe", "create:employe", "read:paiement", 'read:poste-employe'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
@@ -63,21 +63,34 @@ class Employe
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["read:employe", "create:employe", "read:paiement"])]
+    #[Groups(["read:employe", "create:employe", "read:paiement", 'read:poste-employe'])]
     private ?string $phone = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["read:employe", "read:paiement"])]
     private ?string $matricule = null;
 
     #[ORM\OneToMany(mappedBy: 'employe', targetEntity: Paiement::class)]
     private Collection $paiements;
 
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(["read:employe", "read:paiement"])]
+    private $dateCreated;
+
+    #[ORM\OneToMany(mappedBy: 'employe', targetEntity: ListEmployePoste::class)]
+    private Collection $listEmployePostes;
+
+    #[ORM\OneToMany(mappedBy: 'employe', targetEntity: ListEmployeSanction::class)]
+    private Collection $listEmployeSanctions;
     public function __construct()
     {
+        $this->dateCreated = new \DateTime();
         $this->absences = new ArrayCollection();
         $this->matricule = '000';
         $this->paiements = new ArrayCollection();
+        $this->listEmployePostes = new ArrayCollection();
+        $this->listEmployeSanctions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -117,6 +130,18 @@ class Employe
     public function setRegionDeService(?RegionService $regionDeService): static
     {
         $this->regionDeService = $regionDeService;
+
+        return $this;
+    }
+
+    public function getDateCreated(): ?\DateTimeInterface
+    {
+        return $this->dateCreated;
+    }
+
+    public function setDateCreated(\DateTimeInterface $dateCreated): self
+    {
+        $this->dateCreated = $dateCreated;
 
         return $this;
     }
@@ -235,6 +260,66 @@ class Employe
             // set the owning side to null (unless already changed)
             if ($paiement->getEmploye() === $this) {
                 $paiement->setEmploye(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ListEmployePoste>
+     */
+    public function getListEmployePostes(): Collection
+    {
+        return $this->listEmployePostes;
+    }
+
+    public function addListEmployePoste(ListEmployePoste $listEmployePoste): static
+    {
+        if (!$this->listEmployePostes->contains($listEmployePoste)) {
+            $this->listEmployePostes->add($listEmployePoste);
+            $listEmployePoste->setEmploye($this);
+        }
+
+        return $this;
+    }
+
+    public function removeListEmployePoste(ListEmployePoste $listEmployePoste): static
+    {
+        if ($this->listEmployePostes->removeElement($listEmployePoste)) {
+            // set the owning side to null (unless already changed)
+            if ($listEmployePoste->getEmploye() === $this) {
+                $listEmployePoste->setEmploye(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ListEmployeSanction>
+     */
+    public function getListEmployeSanctions(): Collection
+    {
+        return $this->listEmployeSanctions;
+    }
+
+    public function addListEmployeSanction(ListEmployeSanction $listEmployeSanction): static
+    {
+        if (!$this->listEmployeSanctions->contains($listEmployeSanction)) {
+            $this->listEmployeSanctions->add($listEmployeSanction);
+            $listEmployeSanction->setEmploye($this);
+        }
+
+        return $this;
+    }
+
+    public function removeListEmployeSanction(ListEmployeSanction $listEmployeSanction): static
+    {
+        if ($this->listEmployeSanctions->removeElement($listEmployeSanction)) {
+            // set the owning side to null (unless already changed)
+            if ($listEmployeSanction->getEmploye() === $this) {
+                $listEmployeSanction->setEmploye(null);
             }
         }
 

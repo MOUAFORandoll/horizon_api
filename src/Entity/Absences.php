@@ -39,6 +39,9 @@ class Absences
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $heure_arrive = null;
 
+    #[ORM\ManyToOne(inversedBy: 'absences')]
+    private ?Mois $mois = null;
+
     public function __construct()
     {
 
@@ -82,6 +85,18 @@ class Absences
     public function setHeureArrive(\DateTimeInterface $heure_arrive): static
     {
         $this->heure_arrive = $heure_arrive;
+
+        return $this;
+    }
+
+    public function getMois(): ?Mois
+    {
+        return $this->mois;
+    }
+
+    public function setMois(?Mois $mois): static
+    {
+        $this->mois = $mois;
 
         return $this;
     }

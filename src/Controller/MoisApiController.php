@@ -44,4 +44,20 @@ class MoisApiController extends AbstractController
         $this->em->flush(); // Exécute les requêtes SQL pour sauvegarder les entités
         return new JsonResponse(['message' => 'ok'], Response::HTTP_OK, [], true);
     }
+    #[Route('/init-mois-sec', name: 'api_mois_index_sec', methods: ['GET'])]
+    public function index_sec(MoisRepository $moisRepository, SerializerInterface $serializer): JsonResponse
+    {
+        $i = 1;
+
+        $libellesMois = $this->em->getRepository(Mois::class)->findAll();
+
+        foreach ($libellesMois as $mois) {
+            $mois->setNumSigle($i);
+            $i++;
+            $this->em->persist($mois);
+        }
+
+        $this->em->flush();
+        return new JsonResponse(['message' => 'ok'], Response::HTTP_OK, [], true);
+    }
 }
