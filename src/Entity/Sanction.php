@@ -38,12 +38,12 @@ class Sanction
 
     #[ORM\Column(length: 255)]
     #[Groups([
-        "read:sanction", "create:sanction"
+        "read:sanction-employe",  "read:sanction", "create:sanction"
     ])]   private ?string $libelle = null;
 
     #[ORM\Column]
     #[Groups([
-        "read:sanction", "create:sanction"
+        "read:sanction-employe",   "read:sanction", "create:sanction"
     ])]
     private ?int $montant = null;
 

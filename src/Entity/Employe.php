@@ -55,7 +55,7 @@ class Employe
     private ?int $salaire = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["read:employe", "create:employe", "read:paiement", 'read:poste-employe'])]
+    #[Groups(["read:sanction-employe", "read:employe", "create:employe", "read:paiement", 'read:poste-employe'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
@@ -63,7 +63,7 @@ class Employe
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["read:employe", "create:employe", "read:paiement", 'read:poste-employe'])]
+    #[Groups(["read:sanction-employe", "read:employe", "create:employe", "read:paiement", 'read:poste-employe'])]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255, nullable: true)]

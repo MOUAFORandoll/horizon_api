@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: ListEmployeSanctionRepository::class)] #[ApiResource(
     collectionOperations: [
@@ -26,6 +28,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['employe' => 'exact'])]
 class ListEmployeSanction
 {
     #[ORM\Id]
@@ -45,8 +48,15 @@ class ListEmployeSanction
         "read:sanction-employe", "create:sanction-employe"
     ])]   private ?Sanction $sanction = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups([
+        "read:sanction-employe"
+    ])]  #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateCreated = null;
+    #[Groups([
+        "read:sanction-employe", "create:sanction-employe"
+    ])]
+    #[ORM\ManyToOne(inversedBy: 'listEmployeSanctions')]
+    private ?Mois $mois = null;
     public function __construct()
     {
         $this->dateCreated = new \DateTime();
@@ -88,6 +98,18 @@ class ListEmployeSanction
     public function setDateCreated(\DateTimeInterface $dateCreated): static
     {
         $this->dateCreated = $dateCreated;
+
+        return $this;
+    }
+
+    public function getMois(): ?mois
+    {
+        return $this->mois;
+    }
+
+    public function setMois(?mois $mois): static
+    {
+        $this->mois = $mois;
 
         return $this;
     }

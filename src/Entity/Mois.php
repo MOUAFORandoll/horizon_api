@@ -19,7 +19,7 @@ class Mois
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["read:paiement"])]
+    #[Groups(["read:sanction-employe", "read:paiement"])]
     private ?string $libelle = null;
 
     #[ORM\OneToMany(mappedBy: 'mois', targetEntity: Paiement::class)]
@@ -31,10 +31,14 @@ class Mois
     #[ORM\OneToMany(mappedBy: 'mois', targetEntity: Absences::class)]
     private Collection $absences;
 
+    #[ORM\OneToMany(mappedBy: 'mois', targetEntity: ListEmployeSanction::class)]
+    private Collection $listEmployeSanctions;
+
     public function __construct()
     {
         $this->paiements = new ArrayCollection();
         $this->absences = new ArrayCollection();
+        $this->listEmployeSanctions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -120,6 +124,36 @@ class Mois
             // set the owning side to null (unless already changed)
             if ($absence->getMois() === $this) {
                 $absence->setMois(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ListEmployeSanction>
+     */
+    public function getListEmployeSanctions(): Collection
+    {
+        return $this->listEmployeSanctions;
+    }
+
+    public function addListEmployeSanction(ListEmployeSanction $listEmployeSanction): static
+    {
+        if (!$this->listEmployeSanctions->contains($listEmployeSanction)) {
+            $this->listEmployeSanctions->add($listEmployeSanction);
+            $listEmployeSanction->setMois($this);
+        }
+
+        return $this;
+    }
+
+    public function removeListEmployeSanction(ListEmployeSanction $listEmployeSanction): static
+    {
+        if ($this->listEmployeSanctions->removeElement($listEmployeSanction)) {
+            // set the owning side to null (unless already changed)
+            if ($listEmployeSanction->getMois() === $this) {
+                $listEmployeSanction->setMois(null);
             }
         }
 
